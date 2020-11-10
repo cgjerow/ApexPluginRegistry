@@ -19,6 +19,10 @@
         <name>CustomObject</name>
     </types>
     <types>
+        <members>Apex_Factory_Configuration.DO_NOT_DELETE_USED_IN_APEX_TEST</members>
+        <name>CustomMetadata</members>
+    </types>
+    <types>
         <members>PluginRegistry</members>
         <name>ApexTestSuite</name>
     </types>
