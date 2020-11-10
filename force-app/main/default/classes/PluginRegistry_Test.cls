@@ -100,7 +100,7 @@ public class PluginRegistry_Test
     @isTest
     public static void getConfiguredRegistry() 
     {
-        PluginRegistry registry = PluginRegistry.newConfiguredRegistry();
+        PluginRegistry registry = PluginRegistry.newRegistryWithConfigurationSupport();
         System.assertNotEquals(null,registry);
     }
 
@@ -113,7 +113,7 @@ public class PluginRegistry_Test
         PluginRegistry.registryOverride = registry;
 
         PluginRegistry newRegistry = PluginRegistry.newRegistry();
-        PluginRegistry newConfiguredRegistry = PluginRegistry.newConfiguredRegistry();
+        PluginRegistry newConfiguredRegistry = PluginRegistry.newRegistryWithConfigurationSupport();
 
         System.assertEquals(pluginType, newRegistry.lookup(useCase).type());
         System.assertEquals(pluginType, newConfiguredRegistry.lookup(useCase).type());

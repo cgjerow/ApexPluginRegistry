@@ -4,7 +4,7 @@ public inherited sharing virtual class PluginRegistry
     @testVisible private static Map<String,Type> cacheDefaults = new Map<String,Type>();
     @testVisible private static PluginRegistry registryOverride;
 
-    public static PluginRegistry newConfiguredRegistry() {
+    public static PluginRegistry newRegistryWithConfigurationSupport() {
         PluginRegistry registry = new ConfiguredPluginRegistry(cacheDefaults);
         if (registryOverride!=null)
             registry = registryOverride;
