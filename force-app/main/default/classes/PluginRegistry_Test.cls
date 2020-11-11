@@ -6,10 +6,32 @@ public class PluginRegistry_Test
     private static final Type pluginType = PluginRegistry_Test.class;
 
     @isTest
-    public static void registerAndLookupNewPlugin() 
+    public static void registerAndLookupNewPluginByTypeName() 
+    {
+        PluginRegistry registry = PluginRegistry.newRegistry();
+        registry.register(useCase,'PluginRegistry_Test');
+
+        Plugin result = registry.lookup(useCase);
+
+        System.assertEquals(pluginType, result.type());
+    }
+
+    @isTest
+    public static void registerAndLookupNewPluginByType() 
     {
         PluginRegistry registry = PluginRegistry.newRegistry();
         registry.register(useCase,pluginType);
+
+        Plugin result = registry.lookup(useCase);
+
+        System.assertEquals(pluginType, result.type());
+    }
+
+    @isTest
+    public static void registerAndLookupNewPlugin() 
+    {
+        PluginRegistry registry = PluginRegistry.newRegistry();
+        registry.register(useCase,new AType(pluginType));
 
         Plugin result = registry.lookup(useCase);
 
@@ -47,6 +69,28 @@ public class PluginRegistry_Test
         System.assert(failure instanceof PluginRegistry.NotRegisteredException);
     }
 
+    @isTest
+    public static void reregisterAndLookupNewPluginByTypeName() 
+    {
+        PluginRegistry registry = PluginRegistry.newRegistry();
+        registry.reregister(useCase,'PluginRegistry_Test');
+
+        Plugin result = registry.lookup(useCase);
+
+        System.assertEquals(pluginType, result.type());
+    }
+
+    @isTest
+    public static void reregisterAndLookupNewPluginByType() 
+    {
+        PluginRegistry registry = PluginRegistry.newRegistry();
+        registry.reregister(useCase,pluginType);
+
+        Plugin result = registry.lookup(useCase);
+
+        System.assertEquals(pluginType, result.type());
+    }
+    
     @isTest
     public static void reregisterPluginWithouExistingThenWithExisting()
     {
@@ -121,6 +165,6 @@ public class PluginRegistry_Test
 
     private static void defaultCache() 
     {
-        PluginRegistry.cacheDefaults = new Map<String,Type> {useCase => pluginType};
+        PluginRegistry.cacheDefaults = new Map<String,Plugin> {useCase => new AType(pluginType)};
     }
 }

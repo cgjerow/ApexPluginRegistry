@@ -1,7 +1,7 @@
 public inherited sharing virtual class PluginRegistry 
 {
 
-    @testVisible private static Map<String,Type> cacheDefaults = new Map<String,Type>();
+    @testVisible private static Map<String,Plugin> cacheDefaults = new Map<String,Plugin>();
     @testVisible private static PluginRegistry registryOverride;
 
     public static PluginRegistry newRegistryWithConfigurationSupport() {
@@ -24,20 +24,32 @@ public inherited sharing virtual class PluginRegistry
     protected Map<String,Plugin> pluginCache = new Map<String,Plugin>();
 
     protected PluginRegistry() {} 
-    protected PluginRegistry(Map<String,Type> cacheDefaults) {
+    protected PluginRegistry(Map<String,Plugin> cacheDefaults) {
         for(String useCase : cacheDefaults.keySet()) {
             this.forceRegister(useCase, cacheDefaults.get(useCase));
         }
     }
 
-    virtual public void register(String useCase, Type type) {
+    virtual public void register(String useCase, Plugin plugin) {
         if (this.pluginCache.containsKey(useCase))
             throw new AlreadyRegisteredException(new UseCase(useCase));
-        this.forceRegister(useCase, type);
+        this.forceRegister(useCase,plugin);
+    }
+    virtual public void register(String useCase, Type type) {
+        this.register(useCase,new AType(type));
+    }
+    virtual public void register(String useCase, String typeName) {
+        this.register(useCase,Type.forName(typeName));
     }
 
+    virtual public void reregister(String useCase, Plugin plugin) {
+        this.forceRegister(useCase, plugin);
+    }
     virtual public void reregister(String useCase, Type type) {
-        this.forceRegister(useCase,type);
+        this.reregister(useCase, new AType(type));
+    }
+    virtual public void reregister(String useCase, String typeName) {
+        this.reregister(useCase,Type.forName(typeName));
     }
 
     virtual public void remove(String useCase) {
@@ -50,11 +62,8 @@ public inherited sharing virtual class PluginRegistry
         return this.pluginCache.get(useCase);
     }
 
-    protected void forceRegister(String useCase, String type) {
-        this.pluginCache.put(useCase, new AType(type));
-    }
-    protected void forceRegister(String useCase, Type type) {
-        this.pluginCache.put(useCase, new AType(type));
+    protected void forceRegister(String useCase, Plugin plugin) {
+        this.pluginCache.put(useCase, plugin);
     }
 
     public class UseCase {

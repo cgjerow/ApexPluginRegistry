@@ -6,14 +6,14 @@ public inherited sharing class ConfiguredPluginRegistry extends PluginRegistry
     public ConfiguredPluginRegistry() {
         super();
     }
-    public ConfiguredPluginRegistry(Map<String, Type> cacheDefaults) {
+    public ConfiguredPluginRegistry(Map<String, Plugin> cacheDefaults) {
         super(cacheDefaults);
     }
 
     override public Plugin lookup(String useCase) {
         try {
             if (!this.pluginCache.containsKey(useCase)) {
-                this.forceRegister(
+                this.reregister(
                     useCase, 
                     [SELECT 
                         DeveloperName, 
