@@ -51,10 +51,10 @@ public inherited sharing virtual class PluginRegistry
     }
 
     protected void forceRegister(String useCase, String type) {
-        this.pluginCache.put(useCase, new ApexPlugin(type));
+        this.pluginCache.put(useCase, new AType(type));
     }
     protected void forceRegister(String useCase, Type type) {
-        this.pluginCache.put(useCase, new ApexPlugin(type));
+        this.pluginCache.put(useCase, new AType(type));
     }
 
     public class UseCase {
