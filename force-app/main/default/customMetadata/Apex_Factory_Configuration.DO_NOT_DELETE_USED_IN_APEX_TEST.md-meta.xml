@@ -11,10 +11,6 @@
         <value xsi:type="xsd:string">PluginRegistryTest</value>
     </values>
     <values>
-        <field>Is_Test_Visible__c</field>
-        <value xsi:type="xsd:boolean">false</value>
-    </values>
-    <values>
         <field>Test_Case__c</field>
         <value xsi:type="xsd:string">Pass</value>
     </values>
