@@ -1,13 +1,13 @@
-@isTest
-public class ApexPlugin_Test 
+@isTest 
+public class AType_Test 
 {
-    private static Type pluginType = ApexPlugin_Test.class;
+    private static Type pluginType = AType_Test.class;
 
     @isTest
     public static void getType() 
     {
-        Plugin pluginFromString = new ApexPlugin('ApexPlugin_Test');
-        Plugin pluginFromType = new ApexPlugin(pluginType);
+        Plugin pluginFromString = new AType('AType_Test');
+        Plugin pluginFromType = new AType(pluginType);
 
         Type resultFromString = pluginFromString.type();
         Type resultFromType = pluginFromType.type();
@@ -19,7 +19,7 @@ public class ApexPlugin_Test
     @isTest
     public static void invalidDynamicTypeThrowsException() 
     {
-        Plugin pluginFromString = new ApexPlugin('THIS IS AN INVALID TYPE');
+        Plugin pluginFromString = new AType('THIS IS AN INVALID TYPE');
 
         Exception failure;
         try {
@@ -32,13 +32,14 @@ public class ApexPlugin_Test
     }
 
     @isTest
-    public static void newInstance() {
-        Plugin plugin = new ApexPlugin(pluginType);
+    public static void newInstance() 
+    {
+        Plugin plugin = new AType(pluginType);
 
         Object resultWithoutParams = plugin.newInstance();
         Object resultWithParams = plugin.newInstance(new Map<String,Object>{'test'=>'params'});
 
-        System.assert(resultWithoutParams instanceof ApexPlugin_Test);
-        System.assert(resultWithParams instanceof ApexPlugin_Test);
+        System.assert(resultWithoutParams instanceof AType_Test);
+        System.assert(resultWithParams instanceof AType_Test);
     }
 }

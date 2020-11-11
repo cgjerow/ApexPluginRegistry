@@ -1,4 +1,4 @@
-public inherited sharing virtual class ApexPlugin implements Plugin 
+public inherited sharing class AType implements Plugin 
 {
     private final String className;
     private Boolean hasInvalidType = false;
@@ -16,10 +16,10 @@ public inherited sharing virtual class ApexPlugin implements Plugin
         set;
     }
 
-    public ApexPlugin(Type classType) {
+    public AType(Type classType) {
         this.apexType = classType;
     }
-    public ApexPlugin(String className) {
+    public AType(String className) {
         this.className = className;
     }
 
@@ -31,7 +31,7 @@ public inherited sharing virtual class ApexPlugin implements Plugin
         return this.apexType.newInstance();
     }
 
-    // Sub classes may override this to allow for parameter base instantiations
+    // Type does not support parameterized construction, so we use default constructor
     public virtual Object newInstance(Map<String,Object> params) {
         return this.apexType.newInstance();
     }
