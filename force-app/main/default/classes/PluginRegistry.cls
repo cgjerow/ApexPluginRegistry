@@ -84,6 +84,12 @@ public inherited sharing virtual class PluginRegistry
         }
     }
 
+    public class MultipleRegistrationsException extends Exception {
+        public MultipleRegistrationsException(UseCase useCase) {
+            this(String.format('Multiple plugins for {0} were found. Only one configuration per use case should exist.', new List<String>{useCase.name()}));
+        }
+    }
+
     public class AlreadyRegisteredException extends Exception {
         public AlreadyRegisteredException(UseCase useCase) {
             this(String.format('A Plugin for {0} is already registered.', new List<String>{useCase.name()}));

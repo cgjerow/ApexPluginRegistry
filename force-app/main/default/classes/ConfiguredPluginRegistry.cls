@@ -11,27 +11,29 @@ public inherited sharing class ConfiguredPluginRegistry extends PluginRegistry
     }
 
     override public Plugin lookup(String useCase) {
-        try {
-            if (!this.pluginCache.containsKey(useCase)) {
-                loadConfiguration(useCase);
-            }
-            return this.pluginCache.get(useCase);
+        if (!this.pluginCache.containsKey(useCase)) {
+            loadConfiguration(useCase);
         }
-        catch(Exception e) {
-            throw new NotRegisteredException(new UseCase(useCase));
-        }
+        return this.pluginCache.get(useCase);
     }
 
     private void loadConfiguration(String useCase) {
+        List<Apex_Factory_Configuration__mdt> pluginConfigurations = 
+        [SELECT 
+            DeveloperName, 
+            Apex_Class_Name__c 
+            FROM Apex_Factory_Configuration__mdt 
+            WHERE Configuration_Name__c = :useCase
+            AND Test_Case__c = :testCase
+        ];
+        if (pluginConfigurations.isEmpty()) 
+            throw new NotRegisteredException(new UseCase(useCase));
+        else if (pluginConfigurations.size()>1)
+            throw new MultipleRegistrationsException(new UseCase(useCase));
+ 
         this.reregister(
             useCase, 
-            [SELECT 
-                DeveloperName, 
-                Apex_Class_Name__c 
-                FROM Apex_Factory_Configuration__mdt 
-                WHERE Configuration_Name__c = :useCase
-                AND Test_Case__c = :testCase
-            ].Apex_Class_Name__c
+            pluginConfigurations[0].Apex_Class_Name__c
         );
     }
 }

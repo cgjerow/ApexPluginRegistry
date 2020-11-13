@@ -22,4 +22,19 @@ public class ConfiguredPluginRegistry_Test
 
         System.assertEquals(ConfiguredPluginRegistry_Test.class, plugin.type());
     }
+
+    @isTest
+    public static void multipleRegistrationsFound()
+    {
+        ConfiguredPluginRegistry.testCase = 'MultipleRegistrations';
+
+        Exception failure;
+        try { 
+            Plugin plugin = new ConfiguredPluginRegistry().lookup(useCase);
+        } catch(PluginRegistry.MultipleRegistrationsException e) {
+            failure = e;
+        }
+
+        System.assert(failure instanceof PluginRegistry.MultipleRegistrationsException);
+    }
 }

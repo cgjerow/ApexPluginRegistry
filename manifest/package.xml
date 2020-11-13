@@ -20,7 +20,13 @@
     </types>
     <types>
         <members>Apex_Factory_Configuration.DO_NOT_DELETE_USED_IN_APEX_TEST</members>
+        <members>Apex_Factory_Configuration.DO_NOT_DELETE_MultipleRegistration_Test1</members>
+        <members>Apex_Factory_Configuration.DO_NOT_DELETE_MultipleRegistration_Test2</members>
         <name>CustomMetadata</members>
+    </types>
+    <types>
+        <members>Apex_Factory_Configuration__mdt-Apex Factory Configuration Layout</members>
+        <name>Layout</name>
     </types>
     <types>
         <members>PluginRegistry</members>
