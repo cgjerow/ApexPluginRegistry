@@ -163,6 +163,25 @@ public class PluginRegistry_Test
         System.assertEquals(pluginType, newConfiguredRegistry.lookup(useCase).type());
     }
 
+
+    @isTest
+    public static void registeringInvalidTypeByStringThrowsInvalidArgumentExceptionOnEvaluation()
+    {
+        PluginRegistry registry = PluginRegistry.newRegistry();
+        registry.register(useCase, 'THIS IS AN INVALID TYPE');
+        Plugin pluginFromString = registry.lookup(useCase);
+
+        Exception failure;
+        try {
+            Type result = pluginFromString.type();
+        } catch(Exception e) {
+            failure = e;
+        }
+
+        System.assert(failure instanceof IllegalArgumentException);
+        System.assert(!(failure instanceof NullPointerException));
+    }
+
     private static void defaultCache() 
     {
         PluginRegistry.cacheDefaults = new Map<String,Plugin> {useCase => new AType(pluginType)};

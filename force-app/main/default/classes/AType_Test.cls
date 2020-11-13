@@ -19,7 +19,7 @@ public class AType_Test
     @isTest
     public static void invalidDynamicTypeThrowsException() 
     {
-        Plugin pluginFromString = new AType('THIS IS AN INVALID TYPE');
+        AType pluginFromString = new AType('THIS IS AN INVALID TYPE');
 
         Exception failure;
         try {
@@ -29,6 +29,21 @@ public class AType_Test
         }
 
         System.assert(failure instanceof IllegalArgumentException);
+    }
+
+    @isTest
+    public static void passingInvalidTypeForNameThrowsNullPointerException()
+    {
+        AType pluginFromString = new AType(Type.forName('THIS IS AN INVALID TYPE'));
+
+        Exception failure;
+        try {
+            Type result = pluginFromString.type();
+        } catch(Exception e) {
+            failure = e;
+        }
+
+        System.assert(failure instanceof NullPointerException);
     }
 
     @isTest
@@ -61,6 +76,7 @@ public class AType_Test
 
         System.assert(result.parameterizedSuccess);
     }
+
 
     private class CustomPlugin implements Plugin 
     {

@@ -36,10 +36,10 @@ public inherited sharing virtual class PluginRegistry
         this.forceRegister(useCase,plugin);
     }
     virtual public void register(String useCase, Type type) {
-        this.register(useCase,new AType(type));
+        this.register(useCase, new AType(type));
     }
     virtual public void register(String useCase, String typeName) {
-        this.register(useCase,Type.forName(typeName));
+        this.register(useCase, new AType(typeName));
     }
 
     virtual public void reregister(String useCase, Plugin plugin) {
@@ -49,7 +49,7 @@ public inherited sharing virtual class PluginRegistry
         this.reregister(useCase, new AType(type));
     }
     virtual public void reregister(String useCase, String typeName) {
-        this.reregister(useCase,Type.forName(typeName));
+        this.reregister(useCase, new AType(typeName));
     }
 
     virtual public void remove(String useCase) {
