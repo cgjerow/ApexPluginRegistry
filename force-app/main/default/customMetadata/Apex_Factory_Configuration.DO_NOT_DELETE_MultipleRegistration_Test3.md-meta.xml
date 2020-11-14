@@ -4,7 +4,7 @@
     <protected>false</protected>
     <values>
         <field>Apex_Class_Name__c</field>
-        <value xsi:type="xsd:string">PluginRegistry_Test.One</value>
+        <value xsi:type="xsd:string">PluginRegistry_Test.Three</value>
     </values>
     <values>
         <field>Configuration_Name__c</field>
@@ -12,7 +12,7 @@
     </values>
     <values>
         <field>Sort_Position__c</field>
-        <value xsi:type="xsd:double">1.0</value>
+        <value xsi:nil="true"/>
     </values>
     <values>
         <field>Test_Case__c</field>

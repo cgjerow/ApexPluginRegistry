@@ -88,6 +88,11 @@ public inherited sharing virtual class PluginRegistry
     }
 
 
+
+    private interface Finder {
+        PluginModule load(String useCase);
+    }
+
     public class ConfiguredFinder implements Finder 
     {
         private String testCase = '';
@@ -104,16 +109,18 @@ public inherited sharing virtual class PluginRegistry
                 FROM Apex_Factory_Configuration__mdt 
                 WHERE Configuration_Name__c = :useCase
                 AND Test_Case__c = :testCase
-                ORDER BY Sort_Position__c ASC
+                ORDER BY Sort_Position__c ASC NULLS LAST
             ];
             if (pluginConfigurations.isEmpty()) 
                 throw new NotRegisteredException(new UseCase(useCase));
             
             PluginModule plugins = new PluginModule();
             for (Apex_Factory_Configuration__mdt config : pluginConfigurations) {
+                Plugin plugin = (Plugin)new AType(config.Apex_Class_Name__c);
                 if (config.Sort_Position__c==null)
-                    config.Sort_Position__c = -1;
-                plugins.insertAt((Plugin)new AType(config.Apex_Class_Name__c),(Integer)config.Sort_Position__c);
+                    plugins.append(plugin);
+                else
+                    plugins.insertAt(plugin,(Integer)config.Sort_Position__c);
             }
             return plugins;
         }
@@ -140,8 +147,4 @@ public inherited sharing virtual class PluginRegistry
         }
     }
 
-
-    private interface Finder {
-        PluginModule load(String useCase);
-    }
 }

@@ -22,6 +22,7 @@
         <members>Apex_Factory_Configuration.DO_NOT_DELETE_USED_IN_APEX_TEST</members>
         <members>Apex_Factory_Configuration.DO_NOT_DELETE_MultipleRegistration_Test1</members>
         <members>Apex_Factory_Configuration.DO_NOT_DELETE_MultipleRegistration_Test2</members>
+        <members>Apex_Factory_Configuration.DO_NOT_DELETE_MultipleRegistration_Test3</members>
         <name>CustomMetadata</members>
     </types>
     <types>

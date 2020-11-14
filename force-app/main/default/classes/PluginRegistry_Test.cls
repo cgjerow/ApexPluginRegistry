@@ -217,15 +217,16 @@ public class PluginRegistry_Test
     }
 
     @isTest
-    public static void lookupAllOrdersPluginsBySortPosition()
+    public static void lookupAllOrdersPluginsBySortPositionWithNullsAtTheEnd()
     {
         PluginRegistry.testCase = 'MultipleRegistrations';
         PluginRegistry registry = PluginRegistry.newRegistry();
 
         List<Object> results = (List<Object>)registry.lookupAll(useCase).newInstance();
-        System.assertEquals(2,results.size());
+        System.assertEquals(3,results.size());
         System.assert(results[0] instanceof One);
         System.assert(results[1] instanceof Two);
+        System.assert(results[2] instanceof Three);
     }
 
     private static void defaultCache() 
@@ -235,4 +236,5 @@ public class PluginRegistry_Test
 
     public class One {}
     public class Two {}
+    public class Three {}
 }
