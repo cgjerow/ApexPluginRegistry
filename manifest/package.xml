@@ -6,8 +6,8 @@
         <members>Plugin</members>
         <members>PluginRegistry</members>
         <members>PluginRegistry_Test</members>
-        <members>ConfiguredPluginRegistry</members>
-        <members>ConfiguredPluginRegistry_Test</members>
+        <members>PluginModule</members>
+        <members>PluginModule_Test</members>
         <name>ApexClass</name>
     </types>
     <types>

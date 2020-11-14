@@ -1,4 +1,4 @@
-public inherited sharing class AType implements Plugin 
+public inherited sharing class AType implements Plugin, Comparable 
 {
     private final String className;
     private Boolean hasInvalidType = false;
@@ -25,6 +25,33 @@ public inherited sharing class AType implements Plugin
     public AType(String className) {
         this.className = className;
     }
+
+
+    public Boolean equals(Object toCompare) {
+        Boolean result;
+        if (!(toCompare instanceof AType))
+            result = false;
+        else
+            result = ((AType)toCompare).type().equals(this.type());
+        return result;
+    }
+
+    public Integer hashCode() {
+        return ('AType::'+this.type().hashCode()).hashCode();
+    }
+
+    public Integer compareTo(Object toCompare) {
+        Integer result;
+        if (this.equals(toCompare))
+            result = 0;
+        else if (!(toCompare instanceOf AType))
+            result = -1;
+        else
+            result = this.type().toString().compareTo(((AType)toCompare).type().toString());
+        return result;
+    }
+
+
 
     public virtual Type type() {
         return this.apexType;

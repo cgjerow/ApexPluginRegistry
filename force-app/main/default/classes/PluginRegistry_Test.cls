@@ -2,13 +2,48 @@
 public class PluginRegistry_Test 
 {
 
-    private static final String useCase = 'apexTest';
     private static final Type pluginType = PluginRegistry_Test.class;
+    private static final String useCase = 'PluginRegistryTest';
+    
+    @isTest
+    public static void configuredPluginNotFound()
+    {
+        Integer failures = 0;
+        try {
+            PluginRegistry.newRegistry().lookup(useCase);
+        } catch(PluginRegistry.NotRegisteredException e) { failures++; }
+
+        System.assertEquals(1, failures);
+    }
+
+    @isTest
+    public static void configuredPluginFound()
+    {
+        PluginRegistry.testCase = 'Pass';
+        Plugin plugin = PluginRegistry.newRegistry().lookup(useCase);
+
+        System.assertEquals(PluginRegistry_Test.class, plugin.type());
+    }
+
+    @isTest
+    public static void multipleConfiguredRegistrationsFound()
+    {
+        PluginRegistry.testCase = 'MultipleRegistrations';
+
+        Exception failure;
+        try { 
+            Plugin plugin = PluginRegistry.newRegistry().lookup(useCase);
+        } catch(PluginRegistry.MultipleRegistrationsException e) {
+            failure = e;
+        }
+
+        System.assert(failure instanceof PluginRegistry.MultipleRegistrationsException);
+    }
 
     @isTest
     public static void registerAndLookupNewPluginByTypeName() 
     {
-        PluginRegistry registry = PluginRegistry.newRegistry();
+        PluginRegistry registry = PluginRegistry.newCacheOnlyRegistry();
         registry.register(useCase,'PluginRegistry_Test');
 
         Plugin result = registry.lookup(useCase);
@@ -19,7 +54,7 @@ public class PluginRegistry_Test
     @isTest
     public static void registerAndLookupNewPluginByType() 
     {
-        PluginRegistry registry = PluginRegistry.newRegistry();
+        PluginRegistry registry = PluginRegistry.newCacheOnlyRegistry();
         registry.register(useCase,pluginType);
 
         Plugin result = registry.lookup(useCase);
@@ -30,7 +65,7 @@ public class PluginRegistry_Test
     @isTest
     public static void registerAndLookupNewPlugin() 
     {
-        PluginRegistry registry = PluginRegistry.newRegistry();
+        PluginRegistry registry = PluginRegistry.newCacheOnlyRegistry();
         registry.register(useCase,new AType(pluginType));
 
         Plugin result = registry.lookup(useCase);
@@ -42,7 +77,7 @@ public class PluginRegistry_Test
     public static void registerPreExistingPlugin()
     {
         defaultCache();
-        PluginRegistry registry = PluginRegistry.newRegistry();
+        PluginRegistry registry = PluginRegistry.newCacheOnlyRegistry();
 
         Exception failure;
         try {
@@ -57,7 +92,7 @@ public class PluginRegistry_Test
     @isTest
     public static void lookupUnregisteredPlugin()
     {
-        PluginRegistry registry = PluginRegistry.newRegistry();
+        PluginRegistry registry = PluginRegistry.newCacheOnlyRegistry();
 
         Exception failure;
         try {
@@ -72,7 +107,7 @@ public class PluginRegistry_Test
     @isTest
     public static void reregisterAndLookupNewPluginByTypeName() 
     {
-        PluginRegistry registry = PluginRegistry.newRegistry();
+        PluginRegistry registry = PluginRegistry.newCacheOnlyRegistry();
         registry.reregister(useCase,'PluginRegistry_Test');
 
         Plugin result = registry.lookup(useCase);
@@ -83,7 +118,7 @@ public class PluginRegistry_Test
     @isTest
     public static void reregisterAndLookupNewPluginByType() 
     {
-        PluginRegistry registry = PluginRegistry.newRegistry();
+        PluginRegistry registry = PluginRegistry.newCacheOnlyRegistry();
         registry.reregister(useCase,pluginType);
 
         Plugin result = registry.lookup(useCase);
@@ -94,7 +129,7 @@ public class PluginRegistry_Test
     @isTest
     public static void reregisterPluginWithouExistingThenWithExisting()
     {
-        PluginRegistry registry = PluginRegistry.newRegistry();
+        PluginRegistry registry = PluginRegistry.newCacheOnlyRegistry();
         registry.reregister(useCase,pluginType);
         Plugin firstResult = registry.lookup(useCase);
         registry.reregister(useCase,pluginType);
@@ -108,7 +143,7 @@ public class PluginRegistry_Test
     public static void removeExistingItem() 
     {
         defaultCache();
-        PluginRegistry registry = PluginRegistry.newRegistry();
+        PluginRegistry registry = PluginRegistry.newCacheOnlyRegistry();
         registry.remove(useCase);
 
         Exception failure;
@@ -124,7 +159,7 @@ public class PluginRegistry_Test
     @isTest
     public static void removeNonExistentItem() 
     {
-        PluginRegistry registry = PluginRegistry.newRegistry();
+        PluginRegistry registry = PluginRegistry.newCacheOnlyRegistry();
         try {
             registry.remove(useCase);
         } catch(Exception e) {
@@ -144,7 +179,7 @@ public class PluginRegistry_Test
     @isTest
     public static void getConfiguredRegistry() 
     {
-        PluginRegistry registry = PluginRegistry.newRegistryWithConfigurationSupport();
+        PluginRegistry registry = PluginRegistry.newRegistry();
         System.assertNotEquals(null,registry);
     }
 
@@ -152,14 +187,14 @@ public class PluginRegistry_Test
     @isTest
     public static void overrideNewPluginRegistries() 
     {
-        PluginRegistry registry = PluginRegistry.newRegistry();
+        PluginRegistry registry = PluginRegistry.newCacheOnlyRegistry();
         registry.register(useCase,pluginType);
         PluginRegistry.registryOverride = registry;
 
-        PluginRegistry newRegistry = PluginRegistry.newRegistry();
-        PluginRegistry newConfiguredRegistry = PluginRegistry.newRegistryWithConfigurationSupport();
+        PluginRegistry newCacheOnlyRegistry = PluginRegistry.newCacheOnlyRegistry();
+        PluginRegistry newConfiguredRegistry = PluginRegistry.newRegistry();
 
-        System.assertEquals(pluginType, newRegistry.lookup(useCase).type());
+        System.assertEquals(pluginType, newCacheOnlyRegistry.lookup(useCase).type());
         System.assertEquals(pluginType, newConfiguredRegistry.lookup(useCase).type());
     }
 
@@ -167,7 +202,7 @@ public class PluginRegistry_Test
     @isTest
     public static void registeringInvalidTypeByStringThrowsInvalidArgumentExceptionOnEvaluation()
     {
-        PluginRegistry registry = PluginRegistry.newRegistry();
+        PluginRegistry registry = PluginRegistry.newCacheOnlyRegistry();
         registry.register(useCase, 'THIS IS AN INVALID TYPE');
         Plugin pluginFromString = registry.lookup(useCase);
 
@@ -182,8 +217,22 @@ public class PluginRegistry_Test
         System.assert(!(failure instanceof NullPointerException));
     }
 
+
+    @isTest
+    public static void lookupAll() 
+    {
+        PluginRegistry registry = PluginRegistry.newRegistry();
+        registry.register(useCase, new PluginModule(PluginRegistry_Test.class)
+            .append(new AType(PluginRegistry_Test.class))
+            .append(new AType(PluginRegistry_Test.class))
+        );
+
+        List<PluginRegistry_Test> results = (List<PluginRegistry_Test>)registry.lookupAll(useCase).newInstance();
+        System.assertEquals(2,results.size());
+    }
+
     private static void defaultCache() 
     {
-        PluginRegistry.cacheDefaults = new Map<String,Plugin> {useCase => new AType(pluginType)};
+        PluginRegistry.cacheDefaults = new Map<String,PluginModule> {useCase => new PluginModule().append((Plugin)new AType(pluginType)) };
     }
 }
