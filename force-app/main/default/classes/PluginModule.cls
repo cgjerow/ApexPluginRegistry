@@ -90,5 +90,4 @@ public inherited sharing class PluginModule implements Plugin
             return this.plugin.newInstance(params);
         }
     }
-
 }

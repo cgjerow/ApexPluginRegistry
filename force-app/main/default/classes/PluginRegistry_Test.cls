@@ -26,21 +26,6 @@ public class PluginRegistry_Test
     }
 
     @isTest
-    public static void multipleConfiguredRegistrationsFound()
-    {
-        PluginRegistry.testCase = 'MultipleRegistrations';
-
-        Exception failure;
-        try { 
-            Plugin plugin = PluginRegistry.newRegistry().lookup(useCase);
-        } catch(PluginRegistry.MultipleRegistrationsException e) {
-            failure = e;
-        }
-
-        System.assert(failure instanceof PluginRegistry.MultipleRegistrationsException);
-    }
-
-    @isTest
     public static void registerAndLookupNewPluginByTypeName() 
     {
         PluginRegistry registry = PluginRegistry.newCacheOnlyRegistry();
@@ -231,8 +216,23 @@ public class PluginRegistry_Test
         System.assertEquals(2,results.size());
     }
 
+    @isTest
+    public static void lookupAllOrdersPluginsBySortPosition()
+    {
+        PluginRegistry.testCase = 'MultipleRegistrations';
+        PluginRegistry registry = PluginRegistry.newRegistry();
+
+        List<Object> results = (List<Object>)registry.lookupAll(useCase).newInstance();
+        System.assertEquals(2,results.size());
+        System.assert(results[0] instanceof One);
+        System.assert(results[1] instanceof Two);
+    }
+
     private static void defaultCache() 
     {
         PluginRegistry.cacheDefaults = new Map<String,PluginModule> {useCase => new PluginModule().append((Plugin)new AType(pluginType)) };
     }
+
+    public class One {}
+    public class Two {}
 }

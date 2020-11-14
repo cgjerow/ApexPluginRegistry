@@ -108,9 +108,7 @@ public inherited sharing virtual class PluginRegistry
             ];
             if (pluginConfigurations.isEmpty()) 
                 throw new NotRegisteredException(new UseCase(useCase));
-            else if (pluginConfigurations.size()>1)
-                throw new MultipleRegistrationsException(new UseCase(useCase));
-
+            
             PluginModule plugins = new PluginModule();
             for (Apex_Factory_Configuration__mdt config : pluginConfigurations) {
                 if (config.Sort_Position__c==null)
@@ -133,12 +131,6 @@ public inherited sharing virtual class PluginRegistry
     public class NotRegisteredException extends Exception {
         public NotRegisteredException(UseCase useCase) {
             this(String.format('Plugin for {0} cannot be found.', new List<String>{useCase.name()}));
-        }
-    }
-
-    public class MultipleRegistrationsException extends Exception {
-        public MultipleRegistrationsException(UseCase useCase) {
-            this(String.format('Multiple plugins for {0} were found. Only one configuration per use case should exist.', new List<String>{useCase.name()}));
         }
     }
 
