@@ -71,8 +71,8 @@ public inherited sharing class PluginModule implements Plugin
             else
                 result = this.position - ((SortablePlugin)toCompare).position;
 
-            // Will compare the types if the order is the same
-            if (result==0 || result==null)
+            Boolean haveSamePosition = result==0;
+            if (haveSamePosition)
                 result = new AType(this.type()).compareTo(new AType(((Plugin)toCompare).type()));
             
             return result;
