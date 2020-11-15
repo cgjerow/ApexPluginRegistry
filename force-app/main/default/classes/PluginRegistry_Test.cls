@@ -229,6 +229,20 @@ public class PluginRegistry_Test
         System.assert(results[2] instanceof Three);
     }
 
+    @isTest
+    public static void loadAll()
+    {
+        PluginRegistry.testCase = 'MultipleRegistrations';
+        PluginRegistry registry = PluginRegistry.newRegistry();
+
+        Map<String,PluginModule> modules = registry.loadAll();
+        System.assert(modules.containsKey(useCase));
+        System.assertEquals(1,modules.size());
+
+        List<Object> plugins = (List<Object>)modules.get(useCase).newInstance();
+        System.assertEquals(3,plugins.size());
+    }
+
     private static void defaultCache() 
     {
         PluginRegistry.cacheDefaults = new Map<String,PluginModule> {useCase => new PluginModule().append((Plugin)new AType(pluginType)) };

@@ -14,7 +14,8 @@ public inherited sharing virtual class PluginRegistry
 
     public static PluginRegistry newCacheOnlyRegistry() {
         PluginRegistry registry = new PluginRegistry(cacheDefaults);
-        registry.finder = new CacheOnlyFinder(); 
+        registry.finder = new CacheOnlyFinder();
+        registry.configLoaded = true;
         if (registryOverride!=null)
             registry = registryOverride;
         return registry;
@@ -24,6 +25,7 @@ public inherited sharing virtual class PluginRegistry
 
     protected Map<String,PluginModule> pluginCache = new Map<String,PluginModule>();
     protected Finder finder = new ConfiguredFinder(testCase);
+    protected Boolean configLoaded = false;
 
     protected PluginRegistry() {} 
     protected PluginRegistry(Map<String,PluginModule> cacheDefaults) {
@@ -68,6 +70,12 @@ public inherited sharing virtual class PluginRegistry
         return this.pluginCache.get(useCase);
     }
 
+    virtual public Map<String,PluginModule> loadAll() {
+        if (!this.configLoaded)
+            this.pluginCache.putAll(finder.loadAll());
+        return this.pluginCache.clone();
+    }
+
 
     protected void forceRegister(String useCase, Plugin plugin) {
         if (!(plugin instanceof PluginModule))
@@ -91,6 +99,7 @@ public inherited sharing virtual class PluginRegistry
 
     private interface Finder {
         PluginModule load(String useCase);
+        Map<String,PluginModule> loadAll();
     }
 
     public class ConfiguredFinder implements Finder 
@@ -124,11 +133,43 @@ public inherited sharing virtual class PluginRegistry
             }
             return plugins;
         }
+
+        public Map<String,PluginModule> loadAll() {
+            List<Apex_Factory_Configuration__mdt> pluginConfigurations = 
+            [SELECT 
+                DeveloperName,
+                Configuration_Name__c,
+                Apex_Class_Name__c,
+                Sort_Position__c
+                FROM Apex_Factory_Configuration__mdt 
+                WHERE Test_Case__c = :testCase
+                ORDER BY Configuration_Name__c, Sort_Position__c ASC NULLS LAST
+            ];
+            
+            Map<String,PluginModule> modules = new Map<String,PluginModule>();
+            for (Apex_Factory_Configuration__mdt config : pluginConfigurations) {
+                if (modules.get(config.Configuration_Name__c)==null)
+                    modules.put(config.Configuration_Name__c, new PluginModule());
+            
+                PluginModule plugins = modules.get(config.Configuration_Name__c);
+                Plugin plugin = (Plugin)new AType(config.Apex_Class_Name__c);
+                if (config.Sort_Position__c==null)
+                    plugins.append(plugin);
+                else
+                    plugins.insertAt(plugin,(Integer)config.Sort_Position__c);
+            }
+
+            return modules;
+        }
     }
 
     public class CacheOnlyFinder implements Finder {
         public PluginModule load(String useCase) {
             throw new NotRegisteredException(new UseCase(useCase));
+        }
+
+        public Map<String,PluginModule> loadAll() {
+            return new Map<String,PluginModule>();
         }
     }
 
