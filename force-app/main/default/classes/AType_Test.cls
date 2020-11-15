@@ -77,6 +77,75 @@ public class AType_Test
         System.assert(result.parameterizedSuccess);
     }
 
+    @isTest
+    public static void compareHashCodeOfIdenticalTypes() 
+    {
+        AType type1 = new AType(CustomPlugin.class);
+        AType type2 = new AType(CustomPlugin.class);
+        System.assertEquals(type1.hashCode(), type2.hashCode());
+    }
+
+    @isTest
+    public static void compareHashCodeOfDifferentTypes() 
+    {
+        AType type1 = new AType(CustomPlugin.class);
+        AType type2 = new AType(AType_Test.class);
+        System.assertNotEquals(type1.hashCode(), type2.hashCode());
+    }
+
+    @isTest
+    public static void equalityOfIdenticalTypes() 
+    {
+        AType type1 = new AType(CustomPlugin.class);
+        AType type2 = new AType(CustomPlugin.class);
+        System.assert(type1.equals(type2));
+        System.assert(type2.equals(type1));
+    }
+
+    @isTest
+    public static void equalityOfDifferentTypes() 
+    {
+        AType type1 = new AType(CustomPlugin.class);
+        AType type2 = new AType(AType_Test.class);
+        System.assert(!type1.equals(type2));
+        System.assert(!type2.equals(type1));
+    }
+
+    @isTest
+    public static void equalityOfNonAType() 
+    {
+        AType type1 = new AType(CustomPlugin.class);
+        CustomPlugin type2 = new CustomPlugin();
+        System.assert(!type1.equals(type2));
+        System.assert(!type2.equals(type1));
+    }
+
+    @isTest
+    public static void compareIdenticalTypes() 
+    {
+        AType type1 = new AType(CustomPlugin.class);
+        AType type2 = new AType(CustomPlugin.class);
+        System.assert(type1.compareTo(type2)==0);
+        System.assert(type2.compareTo(type1)==0);
+    }
+
+    @isTest
+    public static void compareDifferentTypes() 
+    {
+        AType type1 = new AType(CustomPlugin.class);
+        AType type2 = new AType(AType_Test.class);
+        System.assert(type1.compareTo(type2) > 0);
+        System.assert(type2.compareTo(type1) < 0);
+    }
+
+    @isTest
+    public static void compareNonAType() 
+    {
+        AType type1 = new AType(CustomPlugin.class);
+        CustomPlugin type2 = new CustomPlugin();
+        System.assert(type1.compareTo(type2) > 0);
+    }
+
 
     private class CustomPlugin implements Plugin 
     {

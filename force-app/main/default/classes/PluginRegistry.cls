@@ -27,7 +27,6 @@ public inherited sharing virtual class PluginRegistry
     protected Finder finder = new ConfiguredFinder(testCase);
     protected Boolean configLoaded = false;
 
-    protected PluginRegistry() {} 
     protected PluginRegistry(Map<String,PluginModule> cacheDefaults) {
         for(String useCase : cacheDefaults.keySet()) {
             this.forceRegister(useCase, (Plugin)cacheDefaults.get(useCase));
@@ -71,8 +70,10 @@ public inherited sharing virtual class PluginRegistry
     }
 
     virtual public Map<String,PluginModule> loadAll() {
-        if (!this.configLoaded)
+        if (!this.configLoaded) {
             this.pluginCache.putAll(finder.loadAll());
+            this.configLoaded = true;
+        }
         return this.pluginCache.clone();
     }
 

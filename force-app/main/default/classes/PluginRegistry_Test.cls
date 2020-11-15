@@ -243,6 +243,13 @@ public class PluginRegistry_Test
         System.assertEquals(3,plugins.size());
     }
 
+    @isTest
+    public static void loadAllCacheOnlyReturnsEmptyMap()
+    {
+        Map<String,PluginModule> result = new PluginRegistry.CacheOnlyFinder().loadAll();
+        System.assert(result.isEmpty());
+    }
+
     private static void defaultCache() 
     {
         PluginRegistry.cacheDefaults = new Map<String,PluginModule> {useCase => new PluginModule().append((Plugin)new AType(pluginType)) };

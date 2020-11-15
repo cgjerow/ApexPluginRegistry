@@ -159,6 +159,13 @@ public class PluginModule_Test
         }
     }
 
+    @isTest
+    public static void compareSortablePluginToOtherTypeReturnsGreater() 
+    {
+        Integer result = new PluginModule.SortablePlugin(new CustomPlugin(),0).compareTo(new Worker());
+        System.assert(result > 0);
+    }
+
     public class ZZCustomPlugin extends CustomPlugin
     {
         public ZZCustomPlugin(String name) {

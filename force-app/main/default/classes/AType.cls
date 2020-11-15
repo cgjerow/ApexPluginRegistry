@@ -45,7 +45,7 @@ public inherited sharing class AType implements Plugin, Comparable
         if (this.equals(toCompare))
             result = 0;
         else if (!(toCompare instanceOf AType))
-            result = -1;
+            result = 1;
         else
             result = this.type().toString().compareTo(((AType)toCompare).type().toString());
         return result;

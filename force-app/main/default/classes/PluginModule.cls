@@ -38,7 +38,7 @@ public inherited sharing class PluginModule implements Plugin
 
     virtual public Object newInstance() {
         this.plugins.sort();
-        List<Object> results = (List<Object>)this.newTypedList();
+        List<Object> results = this.newTypedList();
         for (Plugin plugin : plugins)
             results.add(plugin.newInstance());
         return results;
@@ -46,14 +46,14 @@ public inherited sharing class PluginModule implements Plugin
 
     virtual public Object newInstance(Map<String,Object> params) {
         this.plugins.sort();
-        List<Object> results = (List<Object>)this.newTypedList();
+        List<Object> results = this.newTypedList();
         for (Plugin plugin : plugins)
             results.add(plugin.newInstance(params));
         return results;
     }
 
-    private Object newTypedList() {
-        return this.listType.newInstance();
+    private List<Object> newTypedList() {
+        return (List<Object>)this.listType.newInstance();
     }
 
 
@@ -71,7 +71,7 @@ public inherited sharing class PluginModule implements Plugin
         public Integer compareTo(Object toCompare) {
             Integer result;
             if (!(toCompare instanceof SortablePlugin))
-                result = -1;
+                result = 1;
             else
                 result = this.position - ((SortablePlugin)toCompare).position;
 
