@@ -6,7 +6,7 @@ public inherited sharing class PluginModule implements Plugin
 
     public PluginModule() {}
     public PluginModule(Type pluginType) {
-        this.listType = Type.forName('List<'+pluginType.toString()+'>');
+        this.setType(pluginType);
     }
 
     public PluginModule append(Plugin plugin) {
@@ -24,6 +24,10 @@ public inherited sharing class PluginModule implements Plugin
 
     public Type type() {
         return this.listType;
+    }
+    public PluginModule setType(Type pluginType) {
+        this.listType = Type.forName('List<'+pluginType.toString()+'>');
+        return this;
     }
 
 

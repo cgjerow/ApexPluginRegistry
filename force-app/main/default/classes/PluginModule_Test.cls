@@ -120,6 +120,24 @@ public class PluginModule_Test
         System.assert(results[0] instanceof Worker);
     }
 
+    @isTest
+    public static void setType() 
+    {
+        PluginModule module = new PluginModule();
+        module.setType(DoesWork.class);
+        System.assertEquals(List<DoesWork>.class, module.type());
+    }
+
+    @isTest
+    public static void setTypeThenNewInstanceReturnsTypedListWithNewType() 
+    {
+        PluginModule module = new PluginModule().append(new AType(Worker.class));
+        module.setType(DoesWork.class);
+        List<DoesWork> results = (List<DoesWork>)module.newInstance();
+        System.assertEquals(1,results.size());
+        System.assert(results[0] instanceof Worker);
+    }
+
     public virtual class CustomPlugin implements Plugin 
     {
         public String name;
